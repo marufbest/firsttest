@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if generated_text %}
+        <p>Generated text:</p>
+        <p>{{ generated_text }}</p>
+    {% else %}
+        <p>Enter some text to get started.</p>
+    {% endif %}
+{% endblock %}

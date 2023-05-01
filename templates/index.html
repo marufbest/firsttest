@@ -1,0 +1,124 @@
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="static/css/style.css">
+   
+     
+</head>
+<body>
+     <h1>auto complete hoye jabe</h1>
+     <img src="static/img/maruf.jpg" alt="maruf">
+   
+    
+<a href="https://www.google.com/">google</a>
+
+
+    <div class="div">{{b}}</div>
+    <div class="div">{{age}}</div>
+    <div class="div">{{course}}</div>
+    <div class="div">{{student_details}}</div>
+    
+    {% for n in course %}
+    <div class="div">{{forloop.counter0}}{{n}}</div>
+     {% endfor %}
+
+
+     <table border='1' cellpadding='10'>
+        <tr>
+            <td>Name</td>    
+            <td>Phone</td>
+            <td>....</td>
+            <td>.....</td>
+            <td>....</td>
+            <td>...</td>
+            <td>...</td>
+
+        </tr>
+        {% for n in student_details%}
+        <tr>
+            <td>{{n.name}}</td>    
+            <td>{{n.phone}}</td>
+            <td>{{title}}</td>
+            <td>{{title}}</td>
+            <td>{{title}}</td>
+            <td></td>
+
+        </tr>
+          {% endfor %}
+
+     </table>
+
+      <br>
+        
+           {% for s in age %}
+            
+
+            {% if s > 40 %} 
+
+            <div> {{s}} </div>
+            
+            {% endif %}
+
+
+          {% endfor %} 
+
+        <h1>mmmm</h1>
+        {% for m in age %}
+
+        {% if m > 30 %}
+                    <div> {{m}}</div>
+        {% endif %}
+
+        {% endfor %}  
+    mm 
+
+    <form method="post" action="{% url 'chat_with_gpt' %}">
+        {% csrf_token %}
+        <label for="input_text">Enter your input text:</label>
+        <input type="text" name="input_text" id="input_text">
+        <input type="submit" value="Submit">
+    </form>
+    
+</body>
+</html> {% endcomment %}
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chatbot</title>
+  </head>
+  <body>
+    <form id="chatbot-form">
+      <label for="input">Input:</label>
+      <input type="text" id="input" name="input" /><br /><br />
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="response"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#chatbot-form").submit(function (event) {
+          event.preventDefault();
+          var input_text = $("#input").val();
+
+          $.ajax({
+            url: "/chatbot/",
+            type: "POST",
+            data: { input: input_text },
+            success: function (result) {
+              var response_text = result.response;
+              $("#response").html("<p>" + response_text + "</p>");
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

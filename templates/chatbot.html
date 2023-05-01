@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.7/tailwind.min.css" integrity="sha512-V+y60Jk4Pv2IedafAeQtOyuj0e0zIIp8C1ZW0ZslxDdZ1NENRglOxKk6oHJ6UyM6+v/E1yyzvbqA7V9rmkImuQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .chat-message {
+            padding: 10px;
+            margin-bottom: 5px;
+            max-width: 80%;
+        }
+
+        .chat-message strong {
+            margin-right: 10px;
+        }
+
+        .chat-input {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+            max-width: 80%;
+            margin-right: 10px;
+        }
+
+        .chat-button {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #4caf50;
+            color: white;
+            cursor: pointer;
+        }
+
+        .chat-button:hover {
+            background-color: #3e8e41;
+        }
+
+        .chat-container {
+            height: 400px;
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto">
+        <div class="flex justify-center">
+            <div class="w-full lg:w-1/2">
+                <div class="mt-10">
+                    <h1 class="text-3xl font-bold text-center">Chatbot</h1>
+                </div>
+                <div class="bg-white mt-10 p-5 rounded-lg shadow-lg">
+                    <div class="chat-container" id="chat-container">
+                    </div>
+                    <div class="flex mt-5">
+                        <input type="text" name="chat-input" id="chat-input" class="chat-input" placeholder="Type your message here...">
+                        <button id="chat-button" class="chat-button">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const chatInput = document.querySelector('#chat-input');
+        const chatButton = document.querySelector('#chat-button');
+        const chatContainer = document.querySelector('#chat-container');
+
+        chatButton.addEventListener('click', () => {
+            const inputText = chatInput.value.trim();
+            if (!inputText) {
+                return;
+            }
+
+            const inputMessage = '<div class="chat-message"><strong>You:</strong> ' + inputText + '</div>';
+            chatContainer.innerHTML +=
+/***/
+    inputMessage;
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '{% url "chatbot:chat" %}');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const response = xhr.responseText;
+            const responseMessage = '<div class="chat-message"><strong>Chatbot:</strong> ' + response + '</div>';
+            chatContainer.innerHTML += responseMessage;
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    };
+    xhr.send(encodeURI('message=' + inputText));
+
+    chatInput.value = '';
+    });
+    </script>
+
+</body>
+</html>
